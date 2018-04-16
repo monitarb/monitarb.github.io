@@ -2,7 +2,7 @@
 layout: post
 title:  "My First Post"
 date:   2018-04-09 00:00:00
-img: house.jpg
+img: metis.png
 description: This is my first post on a series of many to talk about mostly about Data Science.  I decided to start it to talk about my experience on Metis Data Science Bootcamp.  It’s a 12 week immersive Data Science program and I’m currently attending Spring cohort in NYC
 ---
 
