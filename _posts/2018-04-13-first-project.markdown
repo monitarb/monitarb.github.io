@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "My First Project"
-img: seaborn-heatmap-2.png
+img: heatmap.png
 date:   2018-04-13 00:00:00 +0200
 description: So first week’s gone.  Like I said, this is an assisted information injection.  Project #1 is in groups of 4 people (The only one, other projects will be independent) and it was about analyzing real MTA data to get the optimal positions to distribute invitations for a fundraising event for a made-up Women Tech organization.
 ---
