@@ -2,8 +2,7 @@
 name: Monita Ramirez
 title: data Scientist in progress...
 description: > # this means to ignore newlines until "baseurl:"
-Blog on Data Science, Git, Python, Pandas, Machine Learning, Regressions and much more!
-We have to keep learning every day!
+Blog on Data Science, Git, Python, Pandas, Machine Learning, Regressions and much more
 permalink: ':title/'
 baseurl: "/blog" # the subpath of your site, e.g. /blog
 url: "monitarb.github.io" # the base hostname & protocol for your site, e.g. http://example.com
