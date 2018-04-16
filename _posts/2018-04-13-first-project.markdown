@@ -17,7 +17,7 @@ Just in one week we covered:
 The repository tool for developers.  I had already worked with it during my last job, so I had the **basics** covered. 
 The bootcamp was based on [Atom](https://atom.io), a GUI for Git, but personally I like **command line** better.  Here's a very useful [cheatsheet](http://www.ndpsoftware.com/git-cheatsheet.html) 
 These are the basics:
-```python
+```bash
 git status  # Will show you the current files you’ve modified compared to the ones in the master branch
 git add <filename>  # Or git add . Will add ALL files listed in red
 git commit -m ‘this is my comment’
