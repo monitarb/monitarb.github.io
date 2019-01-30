@@ -1,14 +1,60 @@
 ---
 layout: post
-title:  "Now, I'm a spider"
+title:  "Colombian Coffee Prediction"
 img: cute_spider.jpg
 date:   2018-04-22 00:00:00 +0200
 description: But a friendly spider.  This week we started project #2!
 ---
 
-But a [friendly spider](https://www.youtube.com/watch?v=lGEY8IulWiA).  This week we started project #2!
+So one week from Bootcamp is gone, so fast.  Now is time for personal (You choose the topic) and invividual (You do it alone) projects.  Project #2, is all about scraping and Lineal Regression
 
-Project #2, is all about scraping and Lineal Regression
+For this project I must: 
+- Gather data using data scraping
+- Analize Data using Linear Regression, this includes: feature selection, categorical variables, time series, Regularization
+- Vizualise each step where possible to get a better view of the results and make a better decision.
+
+For topic I decided to predict Coffee Production in Colombia for many reasons: I wanted a continuous variable to get the best from Linear Regression, I wanted to analyze and scrape all sorts of data (weather, economical, etc.), and personally, I wanted a topic to tell a little bit about my country since many of my classmates had a not-very-positive impression.
+
+Colombia is the second Coffee productor country in the world. Only 3% of the country produces 10% of the coffee consumed all over the globe. The purpose of this Project is to analize and determine what are those factors than influence high coffee production to ensure Production for future Months. For that we will analyze several types of information:
+
+- Weather Data: Weather conditions and particular month of harvest can influence the growing of the crops
+- Competitor Countries: Brazil is the biggest coffee productor, Vietnam has similar Production volume and other countries, might affect the production
+- Economical Factors: Most of the Coffee Produced in the country is exported, can exporting volumnes (Demand) influence? Also, since Colombia doesn't use the traditional market currency (dollar), the change rate between dollar and Colombian Perso should be analyzed as well
+
+##Extract Data From Sources
+Gathering all this information was actually the main challenge for this project: 
+- Weather Data was scraped using [Scrapy](https://scrapy.org) from Weather Underground webpage [www.wunderground.com] for the three most important cities close to the coffee plantation areas in Colombia
+ 
+- Coffee Production Data fom Colombia, as well as Exporting Volumes and Dollar Change rate were downloaded in csv format from [Colombian Coffee Growers Organization](www.federaciondecafeteros.org) webpage
+ 
+- Economical and Coffee Production information from other countries were gathered from the [International Coffee Organization](www.ico.org) webpage
+
+## General EDA analysis for all variables
+First, a general EDA analysis was made to find possible relations between variables and have a clearer view on the features that were going to be used in the final models.
+
+We can see that the highest relation between variables can be found in economical data (Exportation Volumes and dollar rate), which makes sense, and coffee price between different countries, where a further analysis will be made.  Weather variables, however, seem to be mode independent between each other in general.
+
+## Creating the Model
+### First Model
+First of all, I split the data between training set (70%) and test set (30%).  I used eight years of data, one row per month = 96 rows. I didn't use, in this case, a validation set, due to the low valume of rows I was working with.  
+The very first model I ran was an Ordinary Linear Regression (OLS) using only weather variables scraped from [Weather Underground webpage](www.wunderground.com): Temperature, wind speed, precipitations, humidity, dew point (All average per month).  I also included an Intercept to this model to give it more flexibility.  
+**Results:** R2(test) = 0.14, Pvalues between [0.039 - 0.745].  
+This means that some variables are relevant, but there's some information missing.  There's still work to do.
+
+### Categorical Variables
+After weather, I decided to look at the hasvest month.  It is said that cofee only grows between the months of May and October, so this might be a good variabke to add to my model.
+Although havest month is a variable that ranges from 1 to 12, it't not an ordinal or numerical variable: There is no reason to say that february (2) is the *double* as january (1) or that they are both *less* than september (9) or december (12).  All months are equally important, month-number does not represent a real value and it doesn't represent any order (In this part of the anlysis, we'll get to Time Series later).
+Harverst month is what we call a categorical variable, and instead of being treated as one column with values (1-12), we will transform it into 11 columns with values (1-0).  Each row will have 10 values in 0 and one value in 1, the month it represents.  This process is called *One Hot Encoding* and he reason we generate 11 columns and not 12 is to reduce redundancy and correlation between this new variables: If all rows from 1st to 11th (january to november) have the value 0, this means that the row represents december.  There is no need to add a new column because it will create correlation between them.  
+**Results:** After including the new 11 features: R2(test) = 0.64, Pvalues between [0.002 - 0.759].  
+The Model is improving!
+
+# AQUI VOY!
+
+Country and Economical Analysis
+
+Time Series Analysis
+
+Regularization of all models and generation of a final Model
 
 Just in one week we covered:
 - Git: 
