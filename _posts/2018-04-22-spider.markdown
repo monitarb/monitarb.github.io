@@ -34,9 +34,9 @@ Gathering all this information was actually the main challenge for this project:
 
 ## General EDA analysis for all variables
 First, a general EDA analysis was made to find possible relations between variables and have a clearer view on the features that were going to be used in the final model.
-
-![Correlation](../assets/img/Coffee01_Correlation.png)
-
+<p align="center">
+ <img src="../assets/img/Coffee01_Correlation.png">
+</p>
 We can see that the highest relation between variables can be found in economical data (Exportation Volumes and dollar rate), which makes sense, and coffee price between different countries, where a further analysis will be made.  Weather variables, however, seem to be mode independent between each other in general.
 
 ## Creating the Model
@@ -58,7 +58,9 @@ The Model is improving!
 
 
 ### Competing Country and Economical Analysis
-![Competing Countries](../assets/img/Coffee02_Countries.png). 
+<p align="center">
+ <img src="../assets/img/Coffee02_Countries.png">
+</p>
 
 As you can see in the picture above, there seems to be a big negative relation between price of Coffee, in Colombia, Brazil or other countries, and the Production volume. Does this majes sense? Do lower prices lead to higher production volume?
 Actually, is the other way around: Higher volumes will make prices go lower, and low production will make the coffee more expensive.  If you think about it, this is simple offer and demand theory.  
@@ -71,9 +73,9 @@ We've already seen that harvest month is an important feature to determine Produ
 Assuming that the proces to export coffee after being harvested (Peeling, drying and in some cases grinding, all these processes in Colombia are done manually to get a better coffee!) takes around a month, lets look if the production is affected by the production from the month before.  This is, is december production affected by november's?, november's by october's? and so on?  This is called time series, and in simple words is done by adding the dependant variable from one month as feature for predicting the next month.  
 
 **Results:** R2(test) improved to 0.67.  Below you can see an image of the predictions using only previous-month-production as feature: You can see that last months predictions (Purple starts, labeled Jan through March) are very close from the real values (Green stars).  This model predicts for next month, a coffee production of 1.176 thousand bags, well just have to wait and see the results.  The model improved so I'll include previous-month-production as a feature in the model
-
-![Time Series](../assets/img/Coffee03_TimeSeries.png)
-
+<p align="center">
+ <img src="../assets/img/Coffee03_TimeSeries.png">
+</p>
 **Update (May 2018):** Real value for April  2018 was 1.037 thousands bags of coffee.  Only about 130 thousand bags off from the models prediction!  
 
 
@@ -83,9 +85,9 @@ Mathematicaly this is done by adding a new term to our model's equation represen
 - Lasso (L1): Takes the cost as the sum of the magnitude (absolute value) of all the coefficients. It will try to lower non-important feature to zero
 - Ridge (L2): Takes the cost as the sum of all the square of all the coefficients.  It will try to make non-important features very low
 - Elastic-Net: Uses a mixture of both of this methods trying to determine, for each coefficient, the most optimal cost.  
-
-![Regularization](../assets/img/Coffee04_Regularization.png)
-
+<p align="center">
+ <img src="../assets/img/Coffee04_Regularization.png">
+</p>
 **Results:** The graph above (I really love this graph!) shows the absolute value of all features according to each of the regularization methods used (OLS is the original model without any regularization at all).  The features marked in red were the ones I chose (My own, personal, subjective decision) for the final model.  R2(test)=0.783!!!
 
 
