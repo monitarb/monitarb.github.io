@@ -6,92 +6,94 @@ date:   2018-04-22 00:00:00 +0200
 description: But a friendly spider.  This week we started project #2!
 ---
 
-So one week from Bootcamp is gone, so fast.  Now is time for personal (You choose the topic) and invividual (You do it alone) projects.  Project #2, is all about scraping and Lineal Regression
+So one week from Bootcamp is gone, so fast.  Now is time for personal (You choose the topic) and invividual (You do it alone) projects.  Project #2, is all about scraping and Lineal Regression.  
 
 For this project I must: 
 - Gather data using data scraping
 - Analize Data using Linear Regression, this includes: feature selection, categorical variables, time series, Regularization
 - Vizualise each step where possible to get a better view of the results and make a better decision.
 
-For topic I decided to predict Coffee Production in Colombia for many reasons: I wanted a continuous variable to get the best from Linear Regression, I wanted to analyze and scrape all sorts of data (weather, economical, etc.), and personally, I wanted a topic to tell a little bit about my country since many of my classmates had a not-very-positive impression.
+As topic I decided to predict Coffee Production in Colombia for many reasons: I wanted a continuous variable to learn the best from Linear Regression, I wanted to analyze and scrape all sorts of data (weather, economical, etc.), and personally, I wanted a topic to tell a little bit about my country since many of my classmates had a not-very-positive impression.
 
-Colombia is the second Coffee productor country in the world. Only 3% of the country produces 10% of the coffee consumed all over the globe. The purpose of this Project is to analize and determine what are those factors than influence high coffee production to ensure Production for future Months. For that we will analyze several types of information:
+## Background:
+Colombia is the second Coffee productor country in the world. Only 3% of the country produces 10% of the coffee consumed all over the globe. The purpose of this Project is to analize and determine what are those factors than influence high coffee production to ensure production for future Months. For that we will analyze several types of information:
 
-- Weather Data: Weather conditions and particular month of harvest can influence the growing of the crops
+- Weather Data: Weather conditions and particularly, month of harvest, can influence the growing of the crops
 - Competitor Countries: Brazil is the biggest coffee productor, Vietnam has similar Production volume and other countries, might affect the production
-- Economical Factors: Most of the Coffee Produced in the country is exported, can exporting volumnes (Demand) influence? Also, since Colombia doesn't use the traditional market currency (dollar), the change rate between dollar and Colombian Perso should be analyzed as well
+- Economical Factors: Most of the Coffee Produced in the country is exported, can exporting volumes (Demand) influence? Also, since Colombia doesn't use the traditional market currency (dollar), the change rate between dollar and Colombian Peso should be analyzed as well
 
-##Extract Data From Sources
+## Extract Data From Sources
 Gathering all this information was actually the main challenge for this project: 
-- Weather Data was scraped using [Scrapy](https://scrapy.org) from Weather Underground webpage [www.wunderground.com] for the three most important cities close to the coffee plantation areas in Colombia
+- Weather Data was scraped using [Scrapy](https://scrapy.org) from [Weather Underground](www.wunderground.com) for the three most important areas in Colombia where coffee is produced
  
-- Coffee Production Data fom Colombia, as well as Exporting Volumes and Dollar Change rate were downloaded in csv format from [Colombian Coffee Growers Organization](www.federaciondecafeteros.org) webpage
+- Coffee Production Data fom Colombia, as well as exporting volumes and dollar change rate were downloaded in csv format from [Colombian Coffee Growers Organization](www.federaciondecafeteros.org) webpage
  
 - Economical and Coffee Production information from other countries were gathered from the [International Coffee Organization](www.ico.org) webpage
 
+> I'll write a future post on Scraping with Scrapy which I found very challenging, but very cool and useful in the end
+
 ## General EDA analysis for all variables
-First, a general EDA analysis was made to find possible relations between variables and have a clearer view on the features that were going to be used in the final models.
+First, a general EDA analysis was made to find possible relations between variables and have a clearer view on the features that were going to be used in the final model.
+
+![Correlation](../assets/img/Coffee01_Correlation.png)
 
 We can see that the highest relation between variables can be found in economical data (Exportation Volumes and dollar rate), which makes sense, and coffee price between different countries, where a further analysis will be made.  Weather variables, however, seem to be mode independent between each other in general.
 
 ## Creating the Model
 ### First Model
 First of all, I split the data between training set (70%) and test set (30%).  I used eight years of data, one row per month = 96 rows. I didn't use, in this case, a validation set, due to the low valume of rows I was working with.  
-The very first model I ran was an Ordinary Linear Regression (OLS) using only weather variables scraped from [Weather Underground webpage](www.wunderground.com): Temperature, wind speed, precipitations, humidity, dew point (All average per month).  I also included an Intercept to this model to give it more flexibility.  
+The very first model I ran was an Ordinary Linear Regression (OLS) using only weather variables scraped from [Weather Underground webpage](www.wunderground.com): Temperature, wind speed, precipitations, humidity, dew point (All average per month).  I also included an Intercept to this model to give it more flexibility. 
+
 **Results:** R2(test) = 0.14, Pvalues between [0.039 - 0.745].  
 This means that some variables are relevant, but there's some information missing.  There's still work to do.
 
+
 ### Categorical Variables
-After weather, I decided to look at the hasvest month.  It is said that cofee only grows between the months of May and October, so this might be a good variabke to add to my model.
-Although havest month is a variable that ranges from 1 to 12, it't not an ordinal or numerical variable: There is no reason to say that february (2) is the *double* as january (1) or that they are both *less* than september (9) or december (12).  All months are equally important, month-number does not represent a real value and it doesn't represent any order (In this part of the anlysis, we'll get to Time Series later).
-Harverst month is what we call a categorical variable, and instead of being treated as one column with values (1-12), we will transform it into 11 columns with values (1-0).  Each row will have 10 values in 0 and one value in 1, the month it represents.  This process is called *One Hot Encoding* and he reason we generate 11 columns and not 12 is to reduce redundancy and correlation between this new variables: If all rows from 1st to 11th (january to november) have the value 0, this means that the row represents december.  There is no need to add a new column because it will create correlation between them.  
+After weather, I decided to look at the hasvest month.  It is said that cofee only grows between the months of May and October, so this might be a good variable to add to my model.
+Although havest month is a variable that ranges from 1 to 12, it's not an ordinal or numerical variable: There is no reason to say that february (value=2) is the *double* as january (value=1) or that they are both *less* than september (value=9) or december (value=12).  All months are equally important, month-number does not represent an amount and it doesn't give any order (In this part of the analysis, we'll get to Time Series later).
+Harverst month is what we call a categorical variable, and instead of being treated as one column with values (1-12), we will transform it into 11 columns with values (1-0).  Each row will have 10 values in 0 and one value in 1, the month it belongs to.  This process is called *One Hot Encoding* and he reason we generate 11 columns and not 12 is to reduce redundancy and correlation between this new variables: If all rows from 1st to 11th (january to november) have the value 0, this means that the row belongs to december.  There is no need to add a new column because it will create correlation between them.  
+
 **Results:** After including the new 11 features: R2(test) = 0.64, Pvalues between [0.002 - 0.759].  
 The Model is improving!
 
-# AQUI VOY!
 
-Country and Economical Analysis
+### Competing Country and Economical Analysis
+![Competing Countries](../assets/img/Coffee02_Countries.png). 
 
-Time Series Analysis
+As you can see in the picture above, there seems to be a big negative relation between price of Coffee, in Colombia, Brazil or other countries, and the Production volume. Does this majes sense? Do lower prices lead to higher production volume?
+Actually, is the other way around: Higher volumes will make prices go lower, and low production will make the coffee more expensive.  If you think about it, this is simple offer and demand theory.  
 
-Regularization of all models and generation of a final Model
+**Results:** Production volume doesn't depend on Coffee prices. On the contrary, prices are dependant from the production. Price in Colombia or in other countries shouldn't be included in the analysis.
 
-Just in one week we covered:
-- Git: 
 
-The repository tool for developers.  I had already worked with it during my last job, so I had the **basics** covered. 
-The bootcamp was based on [Atom](https://atom.io), a GUI for Git, but personally I like **command line** better.  Here's a very useful [cheatsheet](http://www.ndpsoftware.com/git-cheatsheet.html) 
-These are the basics:
-```bash
-git status  # Will show you the current files you’ve modified compared to the ones in the master branch
-git add <filename>  # Or git add . Will add ALL files listed in red
-git commit -m ‘this is my comment’
-git push my_branch master # Or just git push if you have the defaults configured
-```
-- Python/Pandas: 
+### Time Series Analysis
+We've already seen that harvest month is an important feature to determine Production Volume, but what about other months?
+Assuming that the proces to export coffee after being harvested (Peeling, drying and in some cases grinding, all these processes in Colombia are done manually to get a better coffee!) takes around a month, lets look if the production is affected by the production from the month before.  This is, is december production affected by november's?, november's by october's? and so on?  This is called time series, and in simple words is done by adding the dependant variable from one month as feature for predicting the next month.  
 
-I had also worked with Python before, so I got the algorithmic and code syntax’s covered.  The new thing for me was the mix with Pandas.  I found these two pages really useful as a starting point:
+**Results:** R2(test) improved to 0.67.  Below you can see an image of the predictions using only previous-month-production as feature: You can see that last months predictions (Purple starts, labeled Jan through March) are very close from the real values (Green stars).  This model predicts for next month, a coffee production of 1.176 thousand bags, well just have to wait and see the results.  The model improved so I'll include previous-month-production as a feature in the model
 
-> - [Things in Pandas I Wish I'd known sooner](http://nbviewer.jupyter.org/github/rasbt/python_reference/blob/master/tutorials/things_in_pandas.ipynb?utm_source=Python+Weekly+Newsletter&utm_campaign=8416b188e6-Python_Weekly_Issue_176_January_29_2015&utm_medium=email&utm_term=0_9e26887fc5-8416b188e6-312716773#Selecting-NaN-Rows)
+![Time Series](../assets/img/Coffee03_TimeSeries.png)
 
-> - [10 Minutes to Pandas](https://pandas.pydata.org/pandas-docs/stable/10min.html)
+**Update (May 2018):** Real value for April  2018 was 1.037 thousands bags of coffee.  Only about 130 thousand bags off from the models prediction!  
 
-Long story short, it's an easy way to read files, treat them as "tables" (called **DataFrames**).  If you are familiar with tables and SQL, you'll get the hang of it very fast
 
-- Matplotlib/Seaborn: These are two basic graphic libraries on Python that can be very useful.  You can make bar charts, histograms, heatmaps, Scatterplots.  Here I learned that I love **heatmaps**.  In here we discovered different **cool tips** like function [cut](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.cut.html) to split your data into given bins (In our case, by time of day), or how to play with **pretty** color palettes on [seaborn](http://jose-coto.com/styling-with-seaborn)
+### Now, Hoy to find the best features? (Regularization)
+Regularization is a process to find the most important features in our model.  How can we do this?
+Mathematicaly this is done by adding a new term to our model's equation representing the *cost*.  There are multiple ways to do this, but all of them try to minimize the number or value of features included in the model.  If we just added all features, the model will overfit, this is: it will accomodate *very* well to the training data but will do no good on test data. (The other way around would be underfit: The model will be too general and it won't predict well in any of the cases).  The methods I used for this models where:
+- Lasso (L1): Takes the cost as the sum of the magnitude (absolute value) of all the coefficients. It will try to lower non-important feature to zero
+- Ridge (L2): Takes the cost as the sum of all the square of all the coefficients.  It will try to make non-important features very low
+- Elastic-Net: Uses a mixture of both of this methods trying to determine, for each coefficient, the most optimal cost.  
 
-- Folium: When we finally got the analysis done, which stations to aim, on which time frames, we plotted everything in a cool map showing: Recommended stations and traffic ratio along with each location's census data and income per-capita information.  All this was able using the [Folium](http://folium.readthedocs.io/en/latest/) library, You should give it a look!
+![Regularization](../assets/img/Coffee04_Regularization.png)
 
-## Issues
-- Bootcamp was recommended in **Mac or Linux OS** and I'm more comfortable, or should I say **less incomfortable**, with Linux.  So I got my new computer, got Linux installed, did all my prework on it... and on **Day 1**: Something happened with the WiFi.  **You can't do this bootcamp without Internet**.  We are doing research and git requests daily.  I think it was something physical with my network driver, so I had to go and get a Mac book on Day 1.
+**Results:** The graph above (I really love this graph!) shows the absolute value of all features according to each of the regularization methods used (OLS is the original model without any regularization at all).  The features marked in red were the ones I chose (My own, personal, subjective decision) for the final model.  R2(test)=0.783!!!
 
-> **This doesn't mean that Linux is a "no"**.  actually, two people from this Bootcamp are using it without issues.  One of them tried to help me, but again, it was something of **my computer**, not the OS.
 
-- Working this first project in groups can be **tricky**, you have so little time (**4 days**) to get to know and work with people you don't know, from different backgrounds and different ideas, so you'll be **brainstorming and discussing** continuously.
+## Conclusions:
+Coffee Production, instead of what was believed in the beginning of this analysis, doesn't seem to be affected by **weather conditions**.  Coffee will grow in any temperature and humidity % inside the area of observations.  Although protection against **rain** MUST be preserved.  Precipitations seem to be the only weather significant factor
 
-## Lessons Learned
-- I definitely love **heatmaps!***  There's so much you can do with them, even plot real location maps, play with the colors...  You get a very pretty **3 variable** analysis
+Economical facts from **international competidors** such as Brazil, Vietnam, Peru and Mexico, don't seem to affect either.  The production of these countries, along with Colombia, seem to be influenced **all in paralell** by other external features in common not included in this analysis.
 
-- **Collaborating**.  The thing about Bootcamps it's there's not much people and not much time, so we all have to help each other.  Some of the functions and problems in our proyect were easily solved by other classmates or TAs.  **Everyone's willing to help!**
+Month of Harvest seem to be **the most important feature** in Coffee Production.  Periods of **May until August** as well as **October until December** seem to have the highest impact.
 
-- **Writting this blog!**  Thinking on collaborating, not only my classmates but everyone out there, I will be making continuous updates to it.  Adding posts on Data Science tips, things I learned and the whole **Bootcamp experience**.  I have used several blogs in **just one week** that are very useful and am **very grateful** to the people writting them, so I think I'll follow their steps!
+*If you like to look at the full analysis, the data or the code, check out my [Github](https://github.com/monitarb/first_projects/tree/master/P2_ColombianCoffeePrediction)*
